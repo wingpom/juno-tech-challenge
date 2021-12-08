@@ -1,0 +1,32 @@
+-- Query #1
+-- Find Top 5 selling products (by transaction frequency)
+SELECT -- 2 columns: product_name and purchase_count (calculated column)
+  product_name,
+  COUNT(transaction_table.product_id) purchase_count --count of the number of product_ids for every transaction
+FROM
+  tutorial.excel_sql_inventory_data inventory_table
+JOIN
+  tutorial.excel_sql_transaction_data transaction_table --Join all information of the two tables on the shared key, "product_id"
+ON
+  transaction_table.product_id = inventory_table.product_id 
+GROUP BY
+  product_name --Column to aggregate by
+ORDER BY
+  purchase_count --Organize purchase count of products from best selling to least
+  DESC
+LIMIT 5 --Return top 5 results only
+
+-- Query #2
+--Query to return time, product_name, and price_unit from all tables for all transactions that occurred before Jan. 7, 2016
+SELECT --Select 3 columns: time, product_name, price_unit
+  transaction_table.time AS time,
+  product_name, 
+  price_unit
+FROM
+  tutorial.excel_sql_inventory_data inventory_table
+JOIN
+  tutorial.excel_sql_transaction_data transaction_table  --Join two tables on shared key. "product_id"
+ON
+  transaction_table.product_id = inventory_table.product_id
+WHERE 
+  time <= '2016-01-07 00:00:00' --Return all results before Jan. 7, 2016 
